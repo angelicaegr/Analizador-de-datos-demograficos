@@ -1,0 +1,86 @@
+"""
+
+ #path = workspace/boilerplate-demographic-data-analyzer/adult.data.csv
+path = 'adult.data.csv'
+
+df = pd.read_csv(path)
+
+#How many people of each race are represented in this dataset?
+race_count = df['race'].value_counts()
+print("the people represented for each race is: ", race_count)
+
+#What is the average age of men?
+condition = df['sex'] == 'Male'
+average_age_men = df.loc[condition, 'age'].mean()
+print("the average age of men is: ", average_age_men)
+
+#What is the percentage of people who have a Bachelor's degree?
+condition = df['education'] == 'Bachelors'
+percentage_bachelors = (len(df[condition]) / len(df)) * 100
+print("the percentage of people who has a bachelors degree is: ", percentage_bachelors)
+
+#What percentage of people with advanced education (Bachelors, Masters, or Doctorate) make more than 50K?
+condition = (df['education'] == 'Bachelors') | (df['education'] == 'Masters') | (df['education'] == 'Doctorate')
+
+df_advanced_education = df[condition]
+
+people_advance_education = len(df_advanced_education)
+print("people with advance education is:", people_advance_education)
+
+df_high_income_advanced_education = df_advanced_education[df_advanced_education['salary'] == '>50K']
+
+people_advance_education_50k = len(df_high_income_advanced_education)
+print("people advance education with salary more than 50K is:", people_advance_education_50k)
+
+percentage_high_income_advanced_education = (people_advance_education_50k / people_advance_education) * 100
+print("Percentage of people with advanced education making >50K is:", percentage_high_income_advanced_education)
+
+#What percentage of people without advanced education make more than 50K?
+df_no_advanced_education = df[~condition]
+people_no_advance_education = len(df_no_advanced_education)
+print("people with no advance education is:", people_no_advance_education)
+
+
+df_high_income_no_advanced_education = df_no_advanced_education[df_no_advanced_education['salary'] == '>50K']
+high_income_no_advanced_education = len(df_high_income_no_advanced_education)
+print("people with no advance education with salary more than 50K is:", high_income_no_advanced_education)
+
+
+percentage_high_income_no_advanced_education = (high_income_no_advanced_education / people_no_advance_education) * 100
+print("Percentage of people with no advanced education making >50K is:", percentage_high_income_no_advanced_education)
+
+
+#What is the minimum number of hours a person works per week?
+print("the minimun number of hours that a person works per week is: ", df['hours-per-week'].min()) 
+
+
+#What percentage of the people who work the minimum number of hours per week have a salary of more than 50K?
+#Considering a Part time job, 20 hours per week
+df_min_hours = df[df['hours-per-week'] <= 20]
+
+people_part_time = len(df_min_hours)
+print("people with part time job is:", people_part_time)
+
+df_high_income_part_time = df_min_hours[df_min_hours['salary'] == '>50K']
+percentage_high_income_part_time = (len(df_high_income_part_time) / people_part_time) * 100
+print("Percentage of people with part time job making >50K is:", percentage_high_income_part_time)
+
+#What country has the highest percentage of people that earn >50K and what is that percentage?
+condition = (df['salary'] == '>50K')
+count_values_for_country_high_income = df.loc[condition, 'native-country'].value_counts() / df['native-country'].value_counts() * 100
+
+country_high_percentage = count_values_for_country_high_income.idxmax()
+country_high_percentage_value = count_values_for_country_high_income.max()
+
+print("The country with the highest percentage of people earning >50K is:", country_high_percentage)
+print("The percentage is:", country_high_percentage_value)
+
+#Identify the most popular occupation for those who earn >50K in India.
+condition = (df['native-country'] == 'India') & (df['salary'] == '>50K')
+popular_occupation = df.loc[condition, 'occupation'].value_counts().idxmax()
+
+print("The most popular occupation for those who earn >50K in India is:", popular_occupation)
+
+#race_count = df['race'].value_counts()
+#print(race_count)
+"""
